@@ -50,7 +50,7 @@ public final class ToolsInstaller {
 
     public ToolsInstaller(final Context context, final RootShell rootShell) {
         localBinaryDir = new File(context.getCodeCacheDir(), "bin");
-        this.context = context;
+        this.context = context.createDeviceProtectedStorageContext();
         this.rootShell = rootShell;
     }
 
@@ -122,7 +122,7 @@ public final class ToolsInstaller {
         if (allExist)
             return false;
         for (int i = 0; i < files.length; ++i) {
-            if (!SharedLibraryLoader.extractLibrary(context, EXECUTABLES[i], tempFiles[i]))
+            if (!SharedLibraryLoader.extractLibrary(context.createDeviceProtectedStorageContext(), EXECUTABLES[i], tempFiles[i]))
                 throw new FileNotFoundException("Unable to find " + EXECUTABLES[i]);
             if (!tempFiles[i].setExecutable(true, false))
                 throw new IOException("Unable to mark " + tempFiles[i].getAbsolutePath() + " as executable");
